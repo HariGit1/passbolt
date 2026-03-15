@@ -1,0 +1,39 @@
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    daemon
+    maxconn 4000
+    user haproxy
+    group haproxy
+
+defaults
+    log global
+    mode http
+    option httplog
+    option dontlognull
+    timeout connect 10s
+    timeout client  60s
+    timeout server  60s
+
+#----------------------------------
+# FRONTEND - PASSBOLT WEB
+#----------------------------------
+
+frontend passbolt_frontend
+    bind *:80
+    bind *:443 ssl crt /etc/haproxy/ssl/passbolt.pem
+    mode http
+    option forwardfor
+    default_backend passbolt_backend
+
+#----------------------------------
+# BACKEND - APPLICATION SERVERS
+#----------------------------------
+
+backend passbolt_backend
+    mode http
+    balance roundrobin
+    option httpchk GET /
+
+    server pbsapp001 10.112.160.0:80 check
+    server pbsapp011 10.112.161.0:80 check backup
