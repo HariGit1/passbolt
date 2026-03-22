@@ -30,6 +30,24 @@ Expected:
 succeeded!
 
 If failed → firewall/network issue.
+Verify MariaDB Accepts Remote Connections
+On DB server, check MariaDB binding:
+docker exec -it passbolt-db bash
+Inside container:
+cat /etc/mysql/my.cnf | grep bind
+Must be:
+bind-address=0.0.0.0
+If not, restart container with by udpdating docker compose yaml with below cmd:
+command: --bind-address=0.0.0.0
+
+Confirm Database User Can Connect Remotely
+Enter MariaDB:
+docker exec -it passbolt-db mysql -u root -p
+Check users:
+SELECT user, host FROM mysql.user;
+
+You MUST see:
+passbolt   %
 
 STEP — Verify Passbolt DB Connection
 
