@@ -1,0 +1,49 @@
+STEP Enter DB container:
+docker exec -it passbolt-db mysql -u passbolt -pP4ssb0lt
+
+Allow Passbolt server to connect
+
+Replace with your Passbolt server IP:
+
+GRANT ALL PRIVILEGES ON passbolt.* 
+TO 'passbolt'@'10.10.10.21'
+IDENTIFIED BY 'P4ssb0lt';
+
+FLUSH PRIVILEGES;
+
+
+OR allow from anywhere (lab/testing):
+
+GRANT ALL PRIVILEGES ON passbolt.* 
+TO 'passbolt'@'%'
+IDENTIFIED BY 'P4ssb0lt';
+
+FLUSH PRIVILEGES;
+
+STEP — Test Connectivity
+
+From Passbolt server:
+
+nc -zv 10.10.10.20 3306
+
+Expected:
+succeeded!
+
+If failed → firewall/network issue.
+
+STEP — Verify Passbolt DB Connection
+
+Check logs:
+docker logs -f passbolt
+You should see:
+Database connection successful
+Passbolt is ready
+
+Use DNS instead of IP
+
+Example:
+DATASOURCES_DEFAULT_HOST: "db.internal.local"
+
+Use TLS between Passbolt ↔ MariaDB (advanced)
+
+Enable MariaDB SSL later for security across sites.
