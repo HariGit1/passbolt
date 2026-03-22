@@ -1,0 +1,32 @@
+services:
+  passbolt:
+    image: passbolt/passbolt:5.10.0-1-pro
+    container_name: passbolt
+    restart: unless-stopped
+
+    environment:
+      APP_FULL_BASE_URL: https://passbolt.local
+
+      DATASOURCES_DEFAULT_HOST: "10.xx.xx.20"
+      DATASOURCES_DEFAULT_USERNAME: "passbolt"
+      DATASOURCES_DEFAULT_PASSWORD: "P4ssb0lt"
+      DATASOURCES_DEFAULT_DATABASE: "passbolt"
+
+    volumes:
+      - gpg_volume:/etc/passbolt/gpg
+      - jwt_volume:/etc/passbolt/jwt
+      - ${PWD}/subscription_key.txt:/etc/passbolt/subscription_key.txt:ro
+
+    command:
+      - /bin/bash
+      - -c
+      - |
+        /usr/bin/wait-for.sh -t 0 10.xx.xx.20:3306 -- /docker-entrypoint.sh
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+volumes:
+  gpg_volume:
+  jwt_volume:
