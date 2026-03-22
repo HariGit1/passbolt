@@ -1,0 +1,24 @@
+services:
+  db:
+    image: mariadb:11.8.6
+    container_name: passbolt-db
+    restart: unless-stopped
+
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "true"
+      MYSQL_DATABASE: "passbolt"
+      MYSQL_USER: "passbolt"
+      MYSQL_PASSWORD: "P4ssb0lt"
+
+    volumes:
+      - database_volume:/var/lib/mysql
+
+    ports:
+      - "3306:3306"
+
+    command: >
+      --bind-address=0.0.0.0
+      --max_connections=300
+
+volumes:
+  database_volume:
