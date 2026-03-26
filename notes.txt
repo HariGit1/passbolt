@@ -65,3 +65,12 @@ DATASOURCES_DEFAULT_HOST: "db.internal.local"
 Use TLS between Passbolt ↔ MariaDB (advanced)
 
 Enable MariaDB SSL later for security across sites.
+
+=========Docker file with Galera=============
+FROM mariadb:11.8.6
+
+USER root
+
+RUN apt-get update && \
+    apt-get install -y galera-4 && \
+    rm -rf /var/lib/apt/lists/*
