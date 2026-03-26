@@ -1,0 +1,19 @@
+[mysqld]
+bind-address=0.0.0.0
+
+# Galera
+wsrep_on=ON
+wsrep_provider=/usr/lib64/galera/libgalera_smm.so
+
+wsrep_cluster_name="passbolt_cluster"
+wsrep_cluster_address="gcomm://SERVERA_IP,SERVERB_IP"
+
+wsrep_node_name="node1"
+wsrep_node_address="SERVERA_IP"
+
+wsrep_sst_method=rsync
+
+# REQUIRED
+binlog_format=ROW
+default_storage_engine=InnoDB
+innodb_autoinc_lock_mode=2
