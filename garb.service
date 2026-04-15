@@ -1,0 +1,19 @@
+# sudo vi /etc/systemd/system/garb.service
+
+
+[Unit]
+Description=Galera Arbitrator Daemon
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/sbin/garbd \
+  --group=passbolt_galera_cluster \
+  --address=gcomm://10.112.160.197:4567,10.112.161.199:4567 \
+  --option=gmcast.listen_addr=tcp://0.0.0.0:4569
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
