@@ -1,0 +1,20 @@
+Dear Team,
+
+On behalf of Hari, I would like to provide an update regarding the current status of the Passbolt implementation.
+
+We had an internal discussion with our architects and also had a productive conversation with hari during our weekly meeting yesterday, where we addressed the following points.
+
+Firstly, we did not have a Lab environment available to test the provided solution design. This created some limitations during the initial validation phase.
+
+Additionally, the initial design shared by the client had some challenging gaps, as a few required ports were not listed in the design documentation. These ports are necessary to complete the Tank installation and configuration successfully. I would like to outline some of the technical challenges we have been facing during implementation.
+
+Since we are carrying out the implementation tasks incrementally, we encountered specific challenges in establishing connectivity between the declared components. Certain services utilize ports only when they are actively running—for example, the Galera Cluster used for database synchronization. Unless the services are started, it is not always possible to determine whether one machine is successfully communicating with another service hosted on a different machine.
+
+This resulted in multiple requests to the client for firewall openings, as the infrastructure setup has been handled by Billy from the beginning.
+
+However, with the proactive support from hari, who has been highly knowledgeable in understanding both the technical challenges and the environment setup, we have been able to resolve many issues and are now nearing completion of the Passbolt application deployment.
+
+hari had requested that this particular task be completed by 5th May. Once the required ports are enabled in the coming week, we will do our best to improve progress further and meet this timeline.
+
+Best regards,
+Hari
