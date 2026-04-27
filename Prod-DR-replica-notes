@@ -1,0 +1,49 @@
+STEP-BY-STEP SETUP
+STEP 1 — Create replication user on Production
+
+Login:
+
+docker exec -it passbolt-db-CHOC mariadb -uroot -p
+
+Run:
+
+CREATE USER 'repl'@'10.22.105.16' IDENTIFIED BY 'StrongReplicationPass';
+
+GRANT REPLICATION SLAVE ON *.* TO 'repl'@'10.22.105.16';
+
+FLUSH PRIVILEGES;
+STEP 2 — Take Initial Backup
+docker exec passbolt-db-CHOC \
+mysqldump -uroot -p \
+--all-databases \
+--single-transaction \
+--master-data=2 \
+> full_backup.sql
+STEP 3 — Restore to DR
+
+Copy to DR server and run:
+
+docker exec -i passbolt-db-DR \
+mariadb -uroot -p < full_backup.sql
+STEP 4 — Configure Replication
+
+Login DR:
+
+docker exec -it passbolt-db-DR mariadb -uroot -p
+
+Run:
+
+CHANGE MASTER TO
+MASTER_HOST='10.112.160.197',
+MASTER_USER='repl',
+MASTER_PASSWORD='StrongReplicationPass',
+MASTER_USE_GTID=slave_pos;
+
+START SLAVE;
+STEP 5 — Verify
+SHOW SLAVE STATUS\G
+
+Must show:
+
+Slave_IO_Running: Yes
+Slave_SQL_Running: Yes
