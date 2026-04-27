@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  db:
+    image: mariadb:11.8.6
+    container_name: passbolt-db-SPOC
+    restart: unless-stopped
+    network_mode: host
+
+    environment:
+      MYSQL_ROOT_PASSWORD: "csesupportP4ssbolt"
+      MYSQL_DATABASE: "passbolt"
+      MYSQL_USER: "csesupport"
+      MYSQL_PASSWORD: "P4ssbolt"
+
+    volumes:
+      - database_volume:/var/lib/mysql
+
+    command:
+      - --wsrep-on=ON
+      - --wsrep-provider=/usr/lib/galera/libgalera_smm.so
+      - --wsrep-cluster-name=passbolt_MariaDB_cluster
+      - --wsrep-cluster-address=gcomm://10.112.160.197,10.112.161.199
+      - --wsrep-node-name=MariaDB_SPOC
+      - --wsrep-node-address=10.112.161.199
+
+      - --binlog-format=ROW
+      - --default-storage_engine=InnoDB
+      - --innodb-autoinc-lock-mode=2
+
+      - --server-id=2
+      - --log-bin=mysql-bin
+      - --log_slave_updates=ON
+      - --gtid_strict_mode=ON
+      - --binlog_checksum=NONE
+
+volumes:
+  database_volume:
