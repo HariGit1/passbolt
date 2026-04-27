@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  db:
+    image: mariadb:11.8.6
+    container_name: passbolt-db-DR
+    restart: unless-stopped
+    network_mode: host
+
+    environment:
+      MYSQL_ROOT_PASSWORD: "csesupportP4ssbolt"
+      MYSQL_DATABASE: "passbolt"
+      MYSQL_USER: "csesupport"
+      MYSQL_PASSWORD: "P4ssbolt"
+
+    volumes:
+      - database_volume:/var/lib/mysql
+
+    command:
+      - --server-id=3
+      - --log-bin=mysql-bin
+      - --relay-log=relay-bin
+      - --log_slave_updates=ON
+      - --read_only=ON
+      - --gtid_strict_mode=ON
+      - --binlog-format=ROW
+      - --binlog_checksum=NONE
+
+volumes:
+  database_volume:
