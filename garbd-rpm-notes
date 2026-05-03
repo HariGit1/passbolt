@@ -1,0 +1,43 @@
+Minimum required packages
+
+At least:
+
+galera-4-26.4.25-1.el8.x86_64.rpm
+boost-program-options-1.66.x86_64.rpm
+
+But in practice, also grab:
+
+boost-system
+boost-thread
+possibly socat (recommended for Galera environments)
+
+On a machine with internet (same OS version - RHEL 8 / compatible):
+
+mkdir garbd_rpms
+cd garbd_rpms
+
+dnf download --resolve galera-4-26.4.25-1.el8
+
+This will download:
+
+galera
+boost-program-options
+all dependencies automatically
+
+Then copy the whole folder to your offline server.
+
+
+On offline server:
+cd garbd_rpms
+sudo dnf install *.rpm
+
+This avoids dependency issues completely.
+
+galera-4 RPM contains garbd binary
+After install, you should get:
+/usr/sbin/garbd
+
+
+Check:
+
+which garbd
